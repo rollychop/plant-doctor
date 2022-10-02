@@ -50,7 +50,10 @@ private fun takePhoto(
 
     val photoFile = File(
         outputDirectory,
-        SimpleDateFormat(filenameFormat, Locale.US).format(System.currentTimeMillis()) + ".jpg"
+        SimpleDateFormat(
+            filenameFormat,
+            Locale("en", "IN")
+        ).format(System.currentTimeMillis()).plus(".jpg")
     )
 
     val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
@@ -60,6 +63,7 @@ private fun takePhoto(
             Log.e(TAG, "Take photo error:", exception)
             onError(exception)
         }
+
 
         override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
             val savedUri = Uri.fromFile(photoFile)
@@ -113,11 +117,10 @@ fun CameraView(
     // 3
     Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
         AndroidView({ previewView }, modifier = Modifier.fillMaxSize())
-
         IconButton(
             modifier = Modifier.padding(bottom = 20.dp),
             onClick = {
-                Log.i("kilo", "ON CLICK")
+                Log.i(TAG, "ON CLICK")
                 takePhoto(
                     filenameFormat = "yyyy-MM-dd-HH-mm-ss-SSS",
                     imageCapture = imageCapture,
