@@ -28,7 +28,6 @@ class CameraScreenViewModel @Inject constructor() : ViewModel() {
     }
 
 
-
     override fun onCleared() {
         super.onCleared()
         executors?.shutdown()

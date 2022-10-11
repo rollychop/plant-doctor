@@ -2,6 +2,13 @@ package com.brohit.plantdoctor.common
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.ArrowForward
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import kotlin.math.abs
 
 fun Bitmap.getResizedBitmap(newWidth: Int, newHeight: Int): Bitmap {
@@ -29,3 +36,19 @@ fun Bitmap.getResizedBitmap(): Bitmap? {
     recycle()
     return resizedBitmap
 }
+
+@Composable
+fun mirroringIcon(ltrIcon: ImageVector, rtlIcon: ImageVector): ImageVector =
+    if (LocalLayoutDirection.current == LayoutDirection.Ltr) ltrIcon else rtlIcon
+
+/**
+ * Returns the correct back navigation icon based on the current layout direction.
+ */
+@Composable
+fun mirroringBackIcon() = mirroringIcon(
+    ltrIcon = Icons.Outlined.ArrowBack, rtlIcon = Icons.Outlined.ArrowForward
+)
+
+
+
+

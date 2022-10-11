@@ -37,7 +37,6 @@ fun ImageSelectorAndCropper() {
                 options {
                     setGuidelines(CropImageView.Guidelines.ON)
                     setAspectRatio(1, 1)
-
                 }
             )
         }) {

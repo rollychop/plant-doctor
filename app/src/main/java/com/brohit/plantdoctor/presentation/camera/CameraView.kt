@@ -1,7 +1,6 @@
 package com.brohit.plantdoctor.presentation.camera
 
 import android.content.Context
-import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.util.Log
 import androidx.camera.core.CameraSelector
@@ -11,18 +10,16 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.sharp.Lens
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Lens
+import androidx.compose.material.icons.sharp.Image
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,8 +28,9 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import com.brohit.plantdoctor.common.IN
 import java.io.File
-import java.util.*
+import java.text.SimpleDateFormat
 import java.util.concurrent.Executor
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -40,19 +38,19 @@ import kotlin.coroutines.suspendCoroutine
 
 private const val TAG = "CameraView"
 private fun takePhoto(
-    filenameFormat: String,
     imageCapture: ImageCapture,
     outputDirectory: File,
     executor: Executor,
     onImageCaptured: (Uri) -> Unit,
-    onError: (ImageCaptureException) -> Unit
+    onError: (ImageCaptureException) -> Unit,
+    filenameFormat: String = "yyyy-MM-dd-HH-mm-ss-SSS"
 ) {
 
     val photoFile = File(
         outputDirectory,
         SimpleDateFormat(
             filenameFormat,
-            Locale("en", "IN")
+            IN
         ).format(System.currentTimeMillis()).plus(".jpg")
     )
 
@@ -83,6 +81,7 @@ private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
 
 @Composable
 fun CameraView(
+    modifier: Modifier = Modifier,
     outputDirectory: File,
     executor: Executor,
     onImageCaptured: (Uri) -> Unit,
@@ -99,6 +98,9 @@ fun CameraView(
     val cameraSelector = CameraSelector.Builder()
         .requireLensFacing(lensFacing)
         .build()
+    var imageIsSaving by remember {
+        mutableStateOf(false)
+    }
 
     // 2
     LaunchedEffect(lensFacing) {
@@ -110,37 +112,79 @@ fun CameraView(
             preview,
             imageCapture
         )
-
         preview.setSurfaceProvider(previewView.surfaceProvider)
     }
 
     // 3
-    Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
-        AndroidView({ previewView }, modifier = Modifier.fillMaxSize())
-        IconButton(
-            modifier = Modifier.padding(bottom = 20.dp),
-            onClick = {
-                Log.i(TAG, "ON CLICK")
-                takePhoto(
-                    filenameFormat = "yyyy-MM-dd-HH-mm-ss-SSS",
-                    imageCapture = imageCapture,
-                    outputDirectory = outputDirectory,
-                    executor = executor,
-                    onImageCaptured = onImageCaptured,
-                    onError = onError
-                )
-            },
-            content = {
+
+    Box(
+        contentAlignment = Alignment.BottomCenter,
+        modifier = modifier.fillMaxSize()
+    ) {
+        AndroidView(
+            modifier = Modifier.fillMaxSize(),
+            factory = { previewView }
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(.8f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            IconButton(onClick = { /*TODO*/ }) {
                 Icon(
-                    imageVector = Icons.Sharp.Lens,
+                    imageVector = Icons.Sharp.Image,
+                    contentDescription = "Select Crop Image",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(40.dp)
+                )
+            }
+            IconButton(
+                onClick = {
+                    imageIsSaving = true
+                    takePhoto(imageCapture, outputDirectory, executor,
+                        onImageCaptured = { uri ->
+                            imageIsSaving = false
+                            context.mainExecutor.execute {
+                                onImageCaptured(uri)
+                            }
+                        }, onError = { imageCaptureException ->
+                            imageIsSaving = false
+                            context.mainExecutor.execute {
+                                onError(imageCaptureException)
+                            }
+                        })
+                },
+                modifier = Modifier
+                    .padding(20.dp),
+                enabled = imageIsSaving.not(),
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Lens,
                     contentDescription = "Take picture",
                     tint = Color.White,
                     modifier = Modifier
-                        .size(100.dp)
+                        .size(60.dp)
                         .padding(1.dp)
                         .border(1.dp, Color.White, CircleShape)
                 )
+                if (imageIsSaving)
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(60.dp),
+                        color = Color.White,
+                    )
+
             }
-        )
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    imageVector = Icons.Rounded.Info,
+                    contentDescription = "Info Icon",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(40.dp)
+                )
+            }
+        }
+
     }
 }

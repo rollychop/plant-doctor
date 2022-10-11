@@ -7,12 +7,16 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material.SnackbarHost
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.brohit.plantdoctor.presentation.component.PlantDoctorScaffold
+import com.brohit.plantdoctor.presentation.component.PlantDoctorSnackbar
+import com.brohit.plantdoctor.presentation.home_screen.JetsnackBottomBar
 import com.brohit.plantdoctor.presentation.ui.theme.PlantDoctorTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,13 +60,35 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val appState = rememberPlantDoctorAppState()
             PlantDoctorTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background,
-                ) {
-                    DestinationsNavHost(navGraph = NavGraphs.root)
+                PlantDoctorScaffold(
+                    bottomBar = {
+                        if (appState.shouldShowBottomBar)
+                            JetsnackBottomBar(
+                                tabs = appState.bottomBarTabs,
+                                currentRoute = appState.currentDestination.route,
+                                navigateToRoute = {
+                                    appState.navigateToBottomBarRoute(it.route)
+                                }
+                            )
+                    },
+                    snackbarHost = {
+                        SnackbarHost(
+                            hostState = it,
+                            modifier = Modifier.systemBarsPadding(),
+                            snackbar = { snackbarData -> PlantDoctorSnackbar(snackbarData) }
+                        )
+                    },
+                    scaffoldState = appState.scaffoldState,
+                ) { innerPaddingModifier ->
+                    Box(modifier = Modifier.padding(innerPaddingModifier)) {
+                        DestinationsNavHost(
+                            NavGraphs.root,
+                            navController = appState.navController
+                        )
+                    }
+
                 }
             }
         }
