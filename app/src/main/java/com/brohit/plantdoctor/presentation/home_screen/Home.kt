@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.core.os.ConfigurationCompat
-import com.brohit.plantdoctor.presentation.component.PlantDoctorSurface
+import com.brohit.plantdoctor.presentation.component.PdSurface
 import com.brohit.plantdoctor.presentation.destinations.CameraScreenDestination
 import com.brohit.plantdoctor.presentation.destinations.HomeScreenDestination
 import com.brohit.plantdoctor.presentation.destinations.InfoScreenDestination
@@ -56,7 +56,7 @@ enum class HomeSections(
 }
 
 @Composable
-fun JetsnackBottomBar(
+fun PdBottomBar(
     tabs: Array<HomeSections>,
     currentRoute: String,
     navigateToRoute: (DirectionDestinationSpec) -> Unit,
@@ -66,7 +66,7 @@ fun JetsnackBottomBar(
     val routes = remember { tabs.map { it.destination } }
     val currentSection = tabs.first { it.destination.route == currentRoute }
 
-    PlantDoctorSurface(
+    PdSurface(
         color = color,
         contentColor = contentColor
     ) {
@@ -75,10 +75,10 @@ fun JetsnackBottomBar(
             stiffness = 800f,
             dampingRatio = 0.8f
         )
-        JetsnackBottomNavLayout(
+        PdBottomNavLayout(
             selectedIndex = currentSection.ordinal,
             itemCount = routes.size,
-            indicator = { JetsnackBottomNavIndicator() },
+            indicator = { PdBottomNavIndicator() },
             animSpec = springSpec,
             modifier = Modifier.navigationBarsPadding()
         ) {
@@ -98,7 +98,7 @@ fun JetsnackBottomBar(
 
                 val text = section.title.uppercase(currentLocale)
 
-                JetsnackBottomNavigationItem(
+                PdBottomNavigationItem(
                     icon = {
                         Icon(
                             imageVector = section.icon,
@@ -126,7 +126,7 @@ fun JetsnackBottomBar(
 }
 
 @Composable
-private fun JetsnackBottomNavLayout(
+private fun PdBottomNavLayout(
     selectedIndex: Int,
     itemCount: Int,
     animSpec: AnimationSpec<Float>,
@@ -203,7 +203,7 @@ private fun JetsnackBottomNavLayout(
 }
 
 @Composable
-fun JetsnackBottomNavigationItem(
+fun PdBottomNavigationItem(
     icon: @Composable BoxScope.() -> Unit,
     text: @Composable BoxScope.() -> Unit,
     selected: Boolean,
@@ -217,7 +217,7 @@ fun JetsnackBottomNavigationItem(
     ) {
         // Animate the icon/text positions within the item based on selection
         val animationProgress by animateFloatAsState(if (selected) 1f else 0f, animSpec)
-        JetsnackBottomNavItemLayout(
+        PdBottomNavItemLayout(
             icon = icon,
             text = text,
             animationProgress = animationProgress
@@ -226,7 +226,7 @@ fun JetsnackBottomNavigationItem(
 }
 
 @Composable
-private fun JetsnackBottomNavItemLayout(
+private fun PdBottomNavItemLayout(
     icon: @Composable BoxScope.() -> Unit,
     text: @Composable BoxScope.() -> Unit,
     @FloatRange(from = 0.0, to = 1.0) animationProgress: Float
@@ -290,7 +290,7 @@ private fun MeasureScope.placeTextAndIcon(
 }
 
 @Composable
-private fun JetsnackBottomNavIndicator(
+private fun PdBottomNavIndicator(
     strokeWidth: Dp = 2.dp,
     color: Color = PlantDoctorTheme.colors.iconInteractive,
     shape: Shape = BottomNavIndicatorShape

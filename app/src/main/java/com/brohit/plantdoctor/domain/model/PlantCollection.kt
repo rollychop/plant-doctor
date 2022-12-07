@@ -4,7 +4,7 @@ package com.brohit.plantdoctor.domain.model
 data class PlantCollection(
     val id: Long,
     val name: String,
-    val snacks: List<Plant>,
+    val plantList: List<Plant>,
     val type: CollectionType = CollectionType.Normal
 )
 
@@ -14,30 +14,30 @@ enum class CollectionType { Normal, Highlight }
  * A fake repo
  */
 object PlantRepoStatic {
-    fun getPlants(): List<PlantCollection> = snackCollections
+    fun getPlants(): List<PlantCollection> = plantCollections
 }
 
 /**
  * Static data
  */
 
-private val tastyTreats = PlantCollection(
+private val vegetableCollection = PlantCollection(
     id = 1L,
-    name = "Vegetable Plant",
+    name = "Hot Plants",
     type = CollectionType.Highlight,
-    snacks = plants.subList(0, 5)
+    plantList = plants.subList(0, 5)
 )
 
-private val popular = PlantCollection(
+private val fruitCollection = PlantCollection(
     id = 2L,
     name = "Fruit Plant",
-    snacks = plants.subList(5, 10)
+    plantList = plants.subList(5, 10)
 )
 
 
-private val snackCollections = listOf(
-    tastyTreats,
-    popular,
+private val plantCollections = listOf(
+    vegetableCollection,
+    fruitCollection,
 )
 
 

@@ -3,10 +3,8 @@ package com.brohit.plantdoctor.presentation.camera
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
+import android.util.Size
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.border
@@ -16,6 +14,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Lens
 import androidx.compose.material.icons.sharp.Image
@@ -74,10 +73,11 @@ private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
     suspendCoroutine { continuation ->
         ProcessCameraProvider.getInstance(this).also { cameraProvider ->
             cameraProvider.addListener({
-                continuation.resume(cameraProvider.get())
+                continuation.run { resume(cameraProvider.get()) }
             }, ContextCompat.getMainExecutor(this))
         }
     }
+
 
 @Composable
 fun CameraView(
@@ -85,16 +85,34 @@ fun CameraView(
     outputDirectory: File,
     executor: Executor,
     onImageCaptured: (Uri) -> Unit,
-    onError: (ImageCaptureException) -> Unit
+    onError: (ImageCaptureException) -> Unit,
+    onClose: (() -> Unit)? = null
 ) {
     // 1
     val lensFacing = CameraSelector.LENS_FACING_BACK
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val preview = Preview.Builder().build()
+
     val previewView = remember { PreviewView(context) }
-    val imageCapture: ImageCapture = remember { ImageCapture.Builder().build() }
+    val preview = Preview.Builder()
+        .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+        .build()
+    val imageCapture: ImageCapture = remember {
+        ImageCapture.Builder()
+            .setTargetResolution(Size(480, 640))
+//            .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+            .build()
+    }
+    /*val imageAnalysis: ImageAnalysis = remember {
+        ImageAnalysis.Builder()
+            .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+            .setTargetRotation(previewView.display.rotation)
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .setOutputImageFormat(OUTPUT_IMAGE_FORMAT_RGBA_8888)
+            .build()
+
+    }*/
     val cameraSelector = CameraSelector.Builder()
         .requireLensFacing(lensFacing)
         .build()
@@ -110,7 +128,8 @@ fun CameraView(
             lifecycleOwner,
             cameraSelector,
             preview,
-            imageCapture
+            imageCapture,
+//            imageAnalysis
         )
         preview.setSurfaceProvider(previewView.surfaceProvider)
     }
@@ -125,6 +144,18 @@ fun CameraView(
             modifier = Modifier.fillMaxSize(),
             factory = { previewView }
         )
+
+        IconButton(
+            modifier = Modifier.align(Alignment.TopStart),
+            onClick = { onClose?.invoke() }) {
+            Icon(
+                imageVector = Icons.Filled.Close, contentDescription = "Close Camera",
+                tint = Color.White,
+                modifier = Modifier
+                    .size(40.dp)
+            )
+        }
+
         Row(
             modifier = Modifier.fillMaxWidth(.8f),
             verticalAlignment = Alignment.CenterVertically,

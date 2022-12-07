@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.brohit.plantdoctor.presentation.ui.theme.PlantDoctorTheme
 
 @Composable
-fun JetsnackCard(
+fun PdCard(
     modifier: Modifier = Modifier,
     shape: Shape = MaterialTheme.shapes.medium,
     color: Color = PlantDoctorTheme.colors.uiBackground,
@@ -23,7 +23,7 @@ fun JetsnackCard(
     elevation: Dp = 4.dp,
     content: @Composable () -> Unit
 ) {
-    PlantDoctorSurface(
+    PdSurface(
         modifier = modifier,
         shape = shape,
         color = color,
@@ -38,7 +38,7 @@ fun JetsnackCard(
 @Composable
 private fun CardPreview() {
     PlantDoctorTheme {
-        JetsnackCard {
+        PdCard {
             Text(text = "Demo", modifier = Modifier.padding(16.dp))
         }
     }

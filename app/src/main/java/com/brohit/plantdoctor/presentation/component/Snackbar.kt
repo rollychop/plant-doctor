@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.brohit.plantdoctor.presentation.ui.theme.PlantDoctorTheme
 
 @Composable
-fun PlantDoctorSnackbar(
+fun PdSnackbar(
     snackbarData: SnackbarData,
     modifier: Modifier = Modifier,
     actionOnNewLine: Boolean = false,

@@ -76,9 +76,9 @@ fun SnackCollection(
             }*/
         }
         if (highlight && plantCollection.type == CollectionType.Highlight) {
-            HighlightedSnacks(index, plantCollection.snacks, onSnackClick)
+            HighlightedSnacks(index, plantCollection.plantList, onSnackClick)
         } else {
-            Snacks(plantCollection.snacks, onSnackClick)
+            Snacks(plantCollection.plantList, onSnackClick)
         }
     }
 }
@@ -139,7 +139,7 @@ fun SnackItem(
     onSnackClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    PlantDoctorSurface(
+    PdSurface(
         shape = MaterialTheme.shapes.medium,
         modifier = modifier.padding(
             start = 4.dp,
@@ -182,7 +182,7 @@ private fun HighlightSnackItem(
     val left = index * with(LocalDensity.current) {
         (HighlightCardWidth + HighlightCardPadding).toPx()
     }
-    JetsnackCard(
+    PdCard(
         modifier = modifier
             .size(
                 width = 170.dp,
@@ -237,12 +237,12 @@ private fun HighlightSnackItem(
 
 @Composable
 fun SnackImage(
-    imageUrl: String,
+    imageUrl: Any,
     contentDescription: String?,
     modifier: Modifier = Modifier,
     elevation: Dp = 0.dp
 ) {
-    PlantDoctorSurface(
+    PdSurface(
         color = Color.LightGray,
         elevation = elevation,
         shape = CircleShape,

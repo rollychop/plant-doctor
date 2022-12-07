@@ -78,7 +78,7 @@ fun FilterChip(
         if (selected) Color.Black else PlantDoctorTheme.colors.textSecondary
     )
 
-    PlantDoctorSurface(
+    PdSurface(
         modifier = modifier.height(28.dp),
         color = backgroundColor,
         contentColor = textColor,

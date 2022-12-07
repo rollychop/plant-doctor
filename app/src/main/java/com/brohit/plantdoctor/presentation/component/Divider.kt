@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 import com.brohit.plantdoctor.presentation.ui.theme.PlantDoctorTheme
 
 @Composable
-fun JetsnackDivider(
+fun PdDivider(
     modifier: Modifier = Modifier,
     color: Color = PlantDoctorTheme.colors.uiBorder.copy(alpha = DividerAlpha),
     thickness: Dp = 1.dp,

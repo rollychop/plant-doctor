@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.brohit.plantdoctor.presentation.component.PlantDoctorScaffold
-import com.brohit.plantdoctor.presentation.component.PlantDoctorSnackbar
-import com.brohit.plantdoctor.presentation.home_screen.JetsnackBottomBar
+import com.brohit.plantdoctor.presentation.component.PdSnackbar
+import com.brohit.plantdoctor.presentation.home_screen.PdBottomBar
 import com.brohit.plantdoctor.presentation.ui.theme.PlantDoctorTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
                 PlantDoctorScaffold(
                     bottomBar = {
                         if (appState.shouldShowBottomBar)
-                            JetsnackBottomBar(
+                            PdBottomBar(
                                 tabs = appState.bottomBarTabs,
                                 currentRoute = appState.currentDestination.route,
                                 navigateToRoute = {
@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity() {
                         SnackbarHost(
                             hostState = it,
                             modifier = Modifier.systemBarsPadding(),
-                            snackbar = { snackbarData -> PlantDoctorSnackbar(snackbarData) }
+                            snackbar = { snackbarData -> PdSnackbar(snackbarData) }
                         )
                     },
                     scaffoldState = appState.scaffoldState,
@@ -92,7 +92,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        requestCameraPermission()
+//        requestCameraPermission()
     }
 
 

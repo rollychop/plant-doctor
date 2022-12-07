@@ -13,11 +13,11 @@ data class Message(val id: Long, val msg: String)
  */
 object SnackbarManager {
 
-    private val _messages: MutableStateFlow<List<Message>> = MutableStateFlow(emptyList())
-    val messages: StateFlow<List<Message>> get() = _messages.asStateFlow()
+    private val mutableStateFlow: MutableStateFlow<List<Message>> = MutableStateFlow(emptyList())
+    val messages: StateFlow<List<Message>> get() = mutableStateFlow.asStateFlow()
 
     fun showMessage(msg: String) {
-        _messages.update { currentMessages ->
+        mutableStateFlow.update { currentMessages ->
             currentMessages + Message(
                 id = UUID.randomUUID().mostSignificantBits,
                 msg = msg
@@ -26,7 +26,7 @@ object SnackbarManager {
     }
 
     fun setMessageShown(messageId: Long) {
-        _messages.update { currentMessages ->
+        mutableStateFlow.update { currentMessages ->
             currentMessages.filterNot { it.id == messageId }
         }
     }

@@ -12,7 +12,7 @@ fun PlantDTO.toModel() = Plant(
     name ?: "",
     imageUrl ?: Constants.IMG_URL,
     isHealthy,
-    diseaseName ?: "",
+    status ?: "",
     tagLine ?: "",
     tags ?: emptySet(),
     id

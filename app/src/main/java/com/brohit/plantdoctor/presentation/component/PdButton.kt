@@ -32,7 +32,7 @@ import com.brohit.plantdoctor.presentation.ui.theme.PlantDoctorTheme
 
 @Composable
 
-fun JetsnackButton(
+fun PdButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -46,7 +46,7 @@ fun JetsnackButton(
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit
 ) {
-    PlantDoctorSurface(
+    PdSurface(
         shape = shape,
         color = Color.Transparent,
         contentColor = if (enabled) contentColor else disabledContentColor,
@@ -93,7 +93,7 @@ private val ButtonShape = RoundedCornerShape(percent = 50)
 @Composable
 private fun ButtonPreview() {
     PlantDoctorTheme {
-        JetsnackButton(onClick = {}) {
+        PdButton(onClick = {}) {
             Text(text = "Demo")
         }
     }
@@ -105,7 +105,7 @@ private fun ButtonPreview() {
 @Composable
 private fun RectangleButtonPreview() {
     PlantDoctorTheme {
-        JetsnackButton(
+        PdButton(
             onClick = {}, shape = RoundedCornerShape(50)
         ) {
             Text(text = "Demo")

@@ -26,7 +26,7 @@ import kotlin.math.ln
  * [com.brohit.plantdoctor.presentation.ui.theme.PlantDoctorColors]
  */
 @Composable
-fun PlantDoctorSurface(
+fun PdSurface(
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
     color: Color = PlantDoctorTheme.colors.uiBackground,

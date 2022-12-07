@@ -19,8 +19,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.brohit.plantdoctor.domain.model.PlantCollection
-import com.brohit.plantdoctor.presentation.component.JetsnackDivider
-import com.brohit.plantdoctor.presentation.component.PlantDoctorSurface
+import com.brohit.plantdoctor.presentation.component.PdDivider
+import com.brohit.plantdoctor.presentation.component.PdSurface
 import com.brohit.plantdoctor.presentation.component.SnackCollection
 import com.brohit.plantdoctor.presentation.ui.theme.AlphaNearOpaque
 import com.brohit.plantdoctor.presentation.ui.theme.PlantDoctorTheme
@@ -38,7 +38,7 @@ fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
-    PlantDoctorSurface(modifier = Modifier.fillMaxSize()) {
+    PdSurface(modifier = Modifier.fillMaxSize()) {
         Feed(plantCollections = state.plantCollection) {
 
         }
@@ -69,7 +69,7 @@ private fun Feed(
     onSnackClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    PlantDoctorSurface(modifier = modifier.fillMaxSize()) {
+    PdSurface(modifier = modifier.fillMaxSize()) {
         Box {
             SnackCollectionList(
                 plantCollections = plantCollections,
@@ -103,7 +103,7 @@ private fun SnackCollectionList(
             }
             itemsIndexed(plantCollections) { index, snackCollection ->
                 if (index > 0) {
-                    JetsnackDivider(thickness = 2.dp)
+                    PdDivider(thickness = 2.dp)
                 }
 
                 SnackCollection(
@@ -148,7 +148,7 @@ fun DestinationBar(modifier: Modifier = Modifier, title: String = "Home") {
                     .align(Alignment.CenterVertically)
             )
             /* IconButton(
-                 onClick = { *//* todo *//* },
+                 onClick = {  },
                 modifier = Modifier.align(Alignment.CenterVertically)
             ) {
                 Icon(
@@ -158,6 +158,6 @@ fun DestinationBar(modifier: Modifier = Modifier, title: String = "Home") {
                 )
             }*/
         }
-        JetsnackDivider()
+        PdDivider()
     }
 }

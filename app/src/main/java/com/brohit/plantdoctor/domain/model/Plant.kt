@@ -4,7 +4,7 @@ data class Plant(
     val name: String,
     val imageUrl: String,
     val isHealthy: Boolean = true,
-    val diseaseName: String = "",
+    val status: String = "",
     val tagLine: String = "",
     val tags: Set<String> = emptySet(),
     val id: Long = 0L
@@ -15,7 +15,6 @@ val plants = listOf(
         id = 1L,
         name = "Potato",
         imageUrl = "https://images.unsplash.com/photo-1593708697557-f2feca483132?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
-        tagLine = "Ground vegetable"
     ),
     Plant(
 
