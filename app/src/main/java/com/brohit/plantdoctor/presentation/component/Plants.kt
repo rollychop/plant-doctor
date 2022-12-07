@@ -37,9 +37,9 @@ private val gradientWidth
     }
 
 @Composable
-fun SnackCollection(
+fun PlantCollection(
     plantCollection: PlantCollection,
-    onSnackClick: (Long) -> Unit,
+    onPlantClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
     index: Int = 0,
     highlight: Boolean = true
@@ -61,24 +61,11 @@ fun SnackCollection(
                     .weight(1f)
                     .wrapContentWidth(Alignment.Start)
             )
-            /*IconButton(
-                onClick = { },
-                modifier = Modifier.align(Alignment.CenterVertically)
-            ) {
-                Icon(
-                    imageVector = mirroringIcon(
-                        ltrIcon = Icons.Outlined.ArrowForward,
-                        rtlIcon = Icons.Outlined.ArrowBack
-                    ),
-                    tint = PlantDoctorTheme.colors.brand,
-                    contentDescription = null
-                )
-            }*/
         }
         if (highlight && plantCollection.type == CollectionType.Highlight) {
-            HighlightedSnacks(index, plantCollection.plantList, onSnackClick)
+            HighlightedSnacks(index, plantCollection.plantList, onPlantClick)
         } else {
-            Snacks(plantCollection.plantList, onSnackClick)
+            Plants(plantCollection.plantList, onPlantClick)
         }
     }
 }
@@ -105,7 +92,7 @@ private fun HighlightedSnacks(
         contentPadding = PaddingValues(start = 24.dp, end = 24.dp)
     ) {
         itemsIndexed(plants) { index, plant ->
-            HighlightSnackItem(
+            HighlightPlantItem(
                 plant,
                 onSnackClick,
                 index,
@@ -118,25 +105,25 @@ private fun HighlightedSnacks(
 }
 
 @Composable
-private fun Snacks(
-    snacks: List<Plant>,
-    onSnackClick: (Long) -> Unit,
+private fun Plants(
+    plants: List<Plant>,
+    onPlantClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyRow(
         modifier = modifier,
         contentPadding = PaddingValues(start = 12.dp, end = 12.dp)
     ) {
-        items(snacks) { snack ->
-            SnackItem(snack, onSnackClick)
+        items(plants) { plant ->
+            PlantItem(plant, onPlantClick)
         }
     }
 }
 
 @Composable
-fun SnackItem(
+fun PlantItem(
     plant: Plant,
-    onSnackClick: (Long) -> Unit,
+    onPlantClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     PdSurface(
@@ -150,10 +137,10 @@ fun SnackItem(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .clickable(onClick = { onSnackClick(plant.id) })
+                .clickable(onClick = { onPlantClick(plant.id) })
                 .padding(8.dp)
         ) {
-            SnackImage(
+            PlantImage(
                 imageUrl = plant.imageUrl,
                 elevation = 4.dp,
                 contentDescription = null,
@@ -170,9 +157,9 @@ fun SnackItem(
 }
 
 @Composable
-private fun HighlightSnackItem(
+private fun HighlightPlantItem(
     plant: Plant,
-    onSnackClick: (Long) -> Unit,
+    onPlantClick: (Long) -> Unit,
     index: Int,
     gradient: List<Color>,
     gradientWidth: Float,
@@ -192,7 +179,7 @@ private fun HighlightSnackItem(
     ) {
         Column(
             modifier = Modifier
-                .clickable(onClick = { onSnackClick(plant.id) })
+                .clickable(onClick = { onPlantClick(plant.id) })
                 .fillMaxSize()
         ) {
             Box(
@@ -207,7 +194,7 @@ private fun HighlightSnackItem(
                         .fillMaxWidth()
                         .offsetGradientBackground(gradient, gradientWidth, gradientOffset)
                 )
-                SnackImage(
+                PlantImage(
                     imageUrl = plant.imageUrl,
                     contentDescription = null,
                     modifier = Modifier
@@ -236,7 +223,7 @@ private fun HighlightSnackItem(
 }
 
 @Composable
-fun SnackImage(
+fun PlantImage(
     imageUrl: Any,
     contentDescription: String?,
     modifier: Modifier = Modifier,

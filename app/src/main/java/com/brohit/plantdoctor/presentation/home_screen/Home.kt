@@ -168,7 +168,7 @@ private fun PdBottomNavLayout(
         val selectedWidth = 2 * unselectedWidth
         val indicatorMeasurable = measurables.first { it.layoutId == "indicator" }
 
-        val itemPlaceables = measurables
+        val itemPlaceable = measurables
             .filterNot { it == indicatorMeasurable }
             .mapIndexed { index, measurable ->
                 // Animate item's width based upon the selection amount
@@ -189,12 +189,12 @@ private fun PdBottomNavLayout(
 
         layout(
             width = constraints.maxWidth,
-            height = itemPlaceables.maxByOrNull { it.height }?.height ?: 0
+            height = itemPlaceable.maxByOrNull { it.height }?.height ?: 0
         ) {
             val indicatorLeft = indicatorIndex.value * unselectedWidth
             indicatorPlaceable.placeRelative(x = indicatorLeft.toInt(), y = 0)
             var x = 0
-            itemPlaceables.forEach { placeable ->
+            itemPlaceable.forEach { placeable ->
                 placeable.placeRelative(x = x, y = 0)
                 x += placeable.width
             }

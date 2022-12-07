@@ -7,7 +7,8 @@ data class Plant(
     val status: String = "",
     val tagLine: String = "",
     val tags: Set<String> = emptySet(),
-    val id: Long = 0L
+    val id: Long = 0L,
+    val about: String = ""
 )
 
 val plants = listOf(

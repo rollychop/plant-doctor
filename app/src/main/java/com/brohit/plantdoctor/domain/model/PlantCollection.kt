@@ -11,7 +11,7 @@ data class PlantCollection(
 enum class CollectionType { Normal, Highlight }
 
 /**
- * A fake repo
+ * A Static repo
  */
 object PlantRepoStatic {
     fun getPlants(): List<PlantCollection> = plantCollections
@@ -23,14 +23,14 @@ object PlantRepoStatic {
 
 private val vegetableCollection = PlantCollection(
     id = 1L,
-    name = "Hot Plants",
+    name = "Highlighted Plants",
     type = CollectionType.Highlight,
     plantList = plants.subList(0, 5)
 )
 
 private val fruitCollection = PlantCollection(
     id = 2L,
-    name = "Fruit Plant",
+    name = "Plants",
     plantList = plants.subList(5, 10)
 )
 

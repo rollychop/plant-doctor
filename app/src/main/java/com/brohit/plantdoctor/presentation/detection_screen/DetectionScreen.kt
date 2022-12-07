@@ -20,8 +20,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.brohit.plantdoctor.domain.model.SnackbarManager
 import com.brohit.plantdoctor.presentation.component.PdButton
-import com.brohit.plantdoctor.presentation.component.SnackImage
-import com.brohit.plantdoctor.presentation.component.SnackItem
+import com.brohit.plantdoctor.presentation.component.PdDivider
+import com.brohit.plantdoctor.presentation.component.PlantImage
+import com.brohit.plantdoctor.presentation.component.PlantItem
 import com.brohit.plantdoctor.presentation.ui.theme.PlantDoctorTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -101,7 +102,7 @@ fun DetectionScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        SnackImage(
+                        PlantImage(
                             modifier = Modifier
                                 .width(80.dp)
                                 .height(80.dp),
@@ -114,18 +115,20 @@ fun DetectionScreen(
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            SnackItem(plant = state.plant, onSnackClick = {})
+                            PlantItem(plant = state.plant, onPlantClick = {})
                             Text(text = "Status : ${state.plant.status}")
                         }
                     }
-                    Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
+                    PdDivider()
+                    Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = "About ${state.plant.name}",
                         fontSize = 32.sp,
                         modifier = Modifier.fillMaxWidth(.9f)
                     )
                     Text(
-                        text = state.plant.tagLine, modifier = Modifier.fillMaxWidth(.9f),
+                        text = state.plant.about, modifier = Modifier.fillMaxWidth(.9f),
                         textAlign = TextAlign.Justify
                     )
                     Spacer(modifier = Modifier.height(32.dp))
@@ -148,7 +151,7 @@ fun DetectionScreen(
                     backgroundGradient = PlantDoctorTheme.colors.gradient2_3,
                     onClick = { navigator.popBackStack() },
                 ) {
-                    Text(text = "Retake")
+                    Text(text = "Close")
                 }
             }
 

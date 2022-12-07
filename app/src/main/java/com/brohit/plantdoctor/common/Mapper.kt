@@ -15,7 +15,8 @@ fun PlantDTO.toModel() = Plant(
     status ?: "",
     tagLine ?: "",
     tags ?: emptySet(),
-    id
+    id,
+    about ?: ""
 )
 
 fun PlantCollectionDTO.toModel() = PlantCollection(

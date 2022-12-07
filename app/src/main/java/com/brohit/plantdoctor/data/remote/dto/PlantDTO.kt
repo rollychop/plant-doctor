@@ -7,5 +7,6 @@ data class PlantDTO(
     val status: String?,
     val imageUrl: String?,
     val tagLine: String?,
-    val tags: Set<String>?
+    val tags: Set<String>?,
+    val about: String?,
 )

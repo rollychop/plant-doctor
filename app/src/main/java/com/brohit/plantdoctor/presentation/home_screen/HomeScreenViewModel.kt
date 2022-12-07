@@ -26,10 +26,16 @@ class HomeScreenViewModel @Inject constructor(
         repo.getPlantCollection().onEach { result ->
             when (result) {
                 is Resource.Loading -> {
-                    _state.value = HomeScreenState(isLoading = true)
+                    _state.value = HomeScreenState(
+                        isLoading = true,
+                        plantCollection = result.data ?: emptyList()
+                    )
                 }
                 is Resource.Error -> {
-                    _state.value = HomeScreenState(error = result.message ?: "Unexpected Error")
+                    _state.value = HomeScreenState(
+                        error = result.message ?: "Unexpected Error",
+                        plantCollection = result.data ?: emptyList()
+                    )
                 }
                 is Resource.Success -> {
                     _state.value = HomeScreenState(plantCollection = result.data ?: emptyList())

@@ -9,7 +9,6 @@ import com.brohit.plantdoctor.domain.model.Plant
 import com.brohit.plantdoctor.domain.model.PlantCollection
 import com.brohit.plantdoctor.domain.model.PlantRepoStatic
 import com.brohit.plantdoctor.domain.repository.PlantDetectionRepository
-import com.brohit.plantdoctor.ml.ModelUnquant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
@@ -30,10 +29,6 @@ class PlantDetectionRepositoryImpl
 
     override suspend fun getPlantList(): List<Plant> {
         return api.getPlantList().map { it.toModel() }
-    }
-
-    private fun predictOffline(model: ModelUnquant) {
-
     }
 
 
@@ -66,19 +61,18 @@ class PlantDetectionRepositoryImpl
     }
 
     override fun getPlantCollection(): Flow<Resource<List<PlantCollection>>> = flow {
-        emit(Resource.Loading())
+        emit(Resource.Loading(PlantRepoStatic.getPlants()))
         try {
-//            val plantCollection = api.getPlantCollection().map { it.toModel() }
-            val plantCollection = PlantRepoStatic.getPlants()
+            val plantCollection = api.getPlantCollection().map { it.toModel() }
             emit(Resource.Success(plantCollection))
         } catch (io: IOException) {
-            emit(Resource.Error("Internet Error"))
+            emit(Resource.Error("Internet Error", PlantRepoStatic.getPlants()))
             Log.e(TAG, "predict: ", io)
         } catch (http: HttpException) {
-            emit(Resource.Error("Something went Wrong"))
+            emit(Resource.Error("Something went Wrong", PlantRepoStatic.getPlants()))
             Log.e(TAG, "predict: ", http)
         } catch (i: IllegalArgumentException) {
-            emit(Resource.Error("URI ERROR ${i.message}"))
+            emit(Resource.Error("URI ERROR ${i.message}", PlantRepoStatic.getPlants()))
             Log.e(TAG, "predict: ", i)
         }
     }
