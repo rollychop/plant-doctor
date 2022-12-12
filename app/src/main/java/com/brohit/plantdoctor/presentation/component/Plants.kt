@@ -63,7 +63,7 @@ fun PlantCollection(
             )
         }
         if (highlight && plantCollection.type == CollectionType.Highlight) {
-            HighlightedSnacks(index, plantCollection.plantList, onPlantClick)
+            HighlightedPlant(index, plantCollection.plantList, onPlantClick)
         } else {
             Plants(plantCollection.plantList, onPlantClick)
         }
@@ -71,7 +71,7 @@ fun PlantCollection(
 }
 
 @Composable
-private fun HighlightedSnacks(
+private fun HighlightedPlant(
     index: Int,
     plants: List<Plant>,
     onSnackClick: (Long) -> Unit,

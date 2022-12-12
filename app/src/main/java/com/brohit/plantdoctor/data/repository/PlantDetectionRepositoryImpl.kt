@@ -7,6 +7,7 @@ import com.brohit.plantdoctor.common.toModel
 import com.brohit.plantdoctor.data.remote.PlantDoctorApi
 import com.brohit.plantdoctor.domain.model.Plant
 import com.brohit.plantdoctor.domain.model.PlantCollection
+import com.brohit.plantdoctor.domain.model.PlantDetail
 import com.brohit.plantdoctor.domain.model.PlantRepoStatic
 import com.brohit.plantdoctor.domain.repository.PlantDetectionRepository
 import kotlinx.coroutines.flow.Flow
@@ -74,6 +75,34 @@ class PlantDetectionRepositoryImpl
         } catch (i: IllegalArgumentException) {
             emit(Resource.Error("URI ERROR ${i.message}", PlantRepoStatic.getPlants()))
             Log.e(TAG, "predict: ", i)
+        }
+    }
+
+    override fun getPlantDetail(id: Long): Flow<Resource<PlantDetail>> = flow {
+        emit(Resource.Loading())
+        try {
+            val plantDetail = api.getPlantDetail(id)
+            emit(Resource.Success(plantDetail.toModel()))
+        } catch (http: HttpException) {
+            emit(Resource.Error("Unexpected Error"))
+            Log.e(TAG, "getPlantDetail: http Error", http)
+        } catch (io: IOException) {
+            emit(Resource.Error("Connection Error"))
+            Log.e(TAG, "getPlantDetail: Io error", io)
+        }
+    }
+
+    override fun getMarkdown(): Flow<Resource<String>> = flow {
+        emit(Resource.Loading())
+        try {
+            val info = api.getInfo()
+            emit(Resource.Success(info))
+        } catch (http: HttpException) {
+            emit(Resource.Error("Error sent by server: ${http.message()} ${http.code()}"))
+            Log.e(TAG, "getPlantDetail: http Error", http)
+        } catch (io: IOException) {
+            emit(Resource.Error("Connection Error: ${io.message} \n1. Check if Server is Running or Not\n2. If Server is Running Check URL and update"))
+            Log.e(TAG, "getPlantDetail: Io error", io)
         }
     }
 }

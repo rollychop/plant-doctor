@@ -1,5 +1,6 @@
 package com.brohit.plantdoctor.di
 
+import com.brohit.plantdoctor.common.Configs
 import com.brohit.plantdoctor.common.Constants
 import com.brohit.plantdoctor.data.remote.PlantDoctorApi
 import com.brohit.plantdoctor.data.repository.PlantDetectionRepositoryImpl
@@ -19,7 +20,9 @@ object AppModule {
     @Singleton
     fun providePaprikaApi(): PlantDoctorApi {
         return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(
+                Configs.mutableURL.ifEmpty { Constants.BASE_URL }
+            )
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(PlantDoctorApi::class.java)

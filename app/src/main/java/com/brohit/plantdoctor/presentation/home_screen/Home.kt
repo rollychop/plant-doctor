@@ -15,9 +15,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -50,9 +48,9 @@ enum class HomeSections(
     val icon: ImageVector,
     val destination: DirectionDestinationSpec
 ) {
-    HOME("Home", Icons.Outlined.Home, HomeScreenDestination),
+    HOME("Feeds", Icons.Outlined.Feed, HomeScreenDestination),
     SEARCH("Scan", Icons.Outlined.Search, CameraScreenDestination),
-    PROFILE("Info", Icons.Outlined.AccountCircle, InfoScreenDestination)
+    PROFILE("About", Icons.Outlined.More, InfoScreenDestination)
 }
 
 @Composable
@@ -71,7 +69,6 @@ fun PdBottomBar(
         contentColor = contentColor
     ) {
         val springSpec = SpringSpec<Float>(
-            // Determined experimentally
             stiffness = 800f,
             dampingRatio = 0.8f
         )

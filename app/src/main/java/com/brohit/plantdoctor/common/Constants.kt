@@ -1,7 +1,8 @@
 package com.brohit.plantdoctor.common
 
 object Constants {
-    const val BASE_URL = "http://192.168.9.227:8000/"
+    const val DISEASE_IMG_URL = "https://cdn-icons-png.flaticon.com/512/2674/2674462.png"
+    var BASE_URL = "http://192.168.94.227:8000/"
     const val IMG_URL =
         "https://images.unsplash.com/photo-1503149779833-1de50ebe5f8a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80"
     val CLASS_LIST = listOf(

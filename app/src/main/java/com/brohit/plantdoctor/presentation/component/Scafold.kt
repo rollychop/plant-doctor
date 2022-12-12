@@ -16,12 +16,12 @@ import com.brohit.plantdoctor.presentation.ui.theme.PlantDoctorTheme
  */
 
 @Composable
-fun PlantDoctorScaffold(
+fun PdScaffold(
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     topBar: @Composable (() -> Unit) = {},
     bottomBar: @Composable (() -> Unit) = {},
-    snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
+    snackBarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
     floatingActionButton: @Composable (() -> Unit) = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     isFloatingActionButtonDocked: Boolean = false,
@@ -40,7 +40,7 @@ fun PlantDoctorScaffold(
         scaffoldState = scaffoldState,
         topBar = topBar,
         bottomBar = bottomBar,
-        snackbarHost = snackbarHost,
+        snackbarHost = snackBarHost,
         floatingActionButton = floatingActionButton,
         floatingActionButtonPosition = floatingActionButtonPosition,
         isFloatingActionButtonDocked = isFloatingActionButtonDocked,

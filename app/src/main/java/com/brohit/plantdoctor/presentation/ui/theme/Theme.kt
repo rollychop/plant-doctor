@@ -97,9 +97,7 @@ object PlantDoctorTheme {
         get() = LocalPlantDoctorColors.current
 }
 
-/**
- * Jetsnack custom Color Palette
- */
+
 @Stable
 class PlantDoctorColors(
     gradient6_1: List<Color>,
@@ -266,7 +264,7 @@ fun ProvidePlantDoctorColors(
 }
 
 private val LocalPlantDoctorColors = staticCompositionLocalOf<PlantDoctorColors> {
-    error("No JetsnackColorPalette provided")
+    error("No PlantDoctorColorPalette provided")
 }
 
 /**

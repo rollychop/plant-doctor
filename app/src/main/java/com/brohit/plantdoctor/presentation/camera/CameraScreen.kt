@@ -3,7 +3,6 @@
 package com.brohit.plantdoctor.presentation.camera
 
 import android.Manifest
-import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -39,13 +38,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import coil.compose.rememberImagePainter
-import com.brohit.plantdoctor.BuildConfig
 import com.brohit.plantdoctor.R
 import com.brohit.plantdoctor.common.Constants
 import com.brohit.plantdoctor.presentation.camera.CameraPermissionStatus.*
@@ -59,13 +56,14 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.io.*
 import java.util.*
 
 
 private const val TAG = "CameraScreen"
-
+@RootNavGraph(start = true)
 @Destination
 @Composable
 fun CameraScreen(
@@ -333,14 +331,7 @@ private fun onImageCaptureException(imageCaptureException: ImageCaptureException
     Log.e(TAG, "onImageCaptureException: ", imageCaptureException)
 }
 
-private fun getTmpFileUri(context: Context): Uri {
-    val tmpFile = File.createTempFile("tmp_image_file", ".png", context.cacheDir).apply {
-        createNewFile()
-        deleteOnExit()
-    }
 
-    return FileProvider.getUriForFile(context, "${BuildConfig.APPLICATION_ID}.provider", tmpFile)
-}
 
 @Composable
 fun IconSelector(
@@ -376,29 +367,6 @@ fun IconSelector(
     }
 }
 
-fun saveFile(sourceFilename: String, destinationFilename: File) {
-    var bis: BufferedInputStream? = null
-    var bos: BufferedOutputStream? = null
-    try {
-        bis = BufferedInputStream(FileInputStream(sourceFilename))
-        bos = BufferedOutputStream(FileOutputStream(destinationFilename, false))
-        val buf = ByteArray(1024)
-        bis.read(buf)
-        do {
-            Log.d(TAG, "saveFile: ${buf.contentToString()}")
-            bos.write(buf)
-        } while (bis.read(buf) != -1)
-    } catch (e: IOException) {
-        e.printStackTrace()
-    } finally {
-        try {
-            bis?.close()
-            bos?.close()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-    }
-}
 
 fun saveBitmap(bmp: Bitmap, file: File): File {
     val bytes = ByteArrayOutputStream()

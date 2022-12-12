@@ -49,6 +49,16 @@ fun mirroringBackIcon() = mirroringIcon(
     ltrIcon = Icons.Outlined.ArrowBack, rtlIcon = Icons.Outlined.ArrowForward
 )
 
+fun getCorrectedURL(url: String): String {
+    return when {
+        url.contains("http://") && url.last() == '/' -> url
+        url.contains("http://") && url.last() != '/' -> url.plus("/")
+        url.contains("http://")
+            .not() && url.last() == '/' -> "http://".plus(url)
+        else -> "http://".plus(url).plus("/")
+    }
+}
+
 
 
 

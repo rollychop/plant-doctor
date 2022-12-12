@@ -4,40 +4,44 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.brohit.plantdoctor.domain.model.PlantCollection
+import com.brohit.plantdoctor.domain.model.SnackbarManager
+import com.brohit.plantdoctor.presentation.component.DestinationBar
 import com.brohit.plantdoctor.presentation.component.PdDivider
 import com.brohit.plantdoctor.presentation.component.PdSurface
 import com.brohit.plantdoctor.presentation.component.PlantCollection
-import com.brohit.plantdoctor.presentation.ui.theme.AlphaNearOpaque
-import com.brohit.plantdoctor.presentation.ui.theme.PlantDoctorTheme
+import com.brohit.plantdoctor.presentation.destinations.PlantDetailScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 private const val TAG = "HomeScreen"
 
-@RootNavGraph(start = true)
+
 @Destination
 @Composable
 fun HomeScreen(
-    viewModel: HomeScreenViewModel = hiltViewModel()
+    viewModel: HomeScreenViewModel = hiltViewModel(),
+    navigator: DestinationsNavigator
 ) {
     val state = viewModel.state.value
     PdSurface(modifier = Modifier.fillMaxSize()) {
+        if (state.isLoading)
+            LinearProgressIndicator()
         Feed(plantCollections = state.plantCollection) {
-
+            if ((state.isLoading || state.error.isNotEmpty()).not())
+                navigator.navigate(PlantDetailScreenDestination(it).route)
+            else {
+                SnackbarManager.showMessage("Please Configure URL in INFO Tab and Restart app")
+            }
         }
     }
 
@@ -91,7 +95,6 @@ private fun SnackCollectionList(
                         WindowInsets.statusBars.add(WindowInsets(top = 56.dp))
                     )
                 )
-//                FilterBar(filters, onShowFilters = { filtersVisible = true })
             }
             itemsIndexed(plantCollections) { index, plantCollection ->
                 if (index > 0) {
@@ -118,36 +121,4 @@ private fun SnackCollectionList(
 }
 
 
-@Composable
-fun DestinationBar(modifier: Modifier = Modifier, title: String = "Home") {
-    Column(modifier = modifier.statusBarsPadding()) {
-        TopAppBar(
-            backgroundColor = PlantDoctorTheme.colors.uiBackground.copy(alpha = AlphaNearOpaque),
-            contentColor = PlantDoctorTheme.colors.textSecondary,
-            elevation = 5.dp
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.subtitle1,
-                color = PlantDoctorTheme.colors.textSecondary,
-                textAlign = TextAlign.Left,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .weight(1f)
-                    .align(Alignment.CenterVertically)
-            )
-            /* IconButton(
-                 onClick = {  },
-                modifier = Modifier.align(Alignment.CenterVertically)
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.ExpandMore,
-                    tint = PlantDoctorTheme.colors.brand,
-                    contentDescription = null
-                )
-            }*/
-        }
-        PdDivider()
-    }
-}
+
